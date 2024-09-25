@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const Video = require('../../db/models/Video');
 
 const getVideos = async (req, res) => {
@@ -21,4 +22,24 @@ const getVideos = async (req, res) => {
     }
 };
 
-module.exports = { getVideos };
+const searchVideos = async (req, res) => {
+    const { query } = req.query;
+
+    try {
+        const videos = await Video.findAll({
+            where: {
+                [Op.or]: [
+                    { title: { [Op.iLike]: `%${query}%` } },
+                    { description: { [Op.iLike]: `%${query}%` } },
+                ],
+            },
+            order: [['publishedAt', 'DESC']],
+        });
+
+        res.json(videos);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = { getVideos, searchVideos };
