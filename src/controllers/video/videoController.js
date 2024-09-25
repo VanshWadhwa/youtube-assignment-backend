@@ -2,12 +2,12 @@ const { Op } = require('sequelize');
 const Video = require('../../db/models/Video');
 
 const getVideos = async (req, res) => {
-    const { page = 1, limit = 10 } = req.query;
+    const { page = 1, limit = 10, sortOrder = 'desc' } = req.query;
     const offset = (page - 1) * limit;
 
     try {
         const videos = await Video.findAndCountAll({
-            order: [['publishedAt', 'DESC']],
+            order: [['publishedAt', sortOrder]],
             limit,
             offset,
         });
@@ -21,6 +21,7 @@ const getVideos = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
 
 const searchVideos = async (req, res) => {
     const { query } = req.query;

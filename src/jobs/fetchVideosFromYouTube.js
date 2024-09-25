@@ -11,7 +11,7 @@ const apiKeyUsage = process.env.YOUTUBE_API_KEYS.split(',').map(key => ({
 let currentKeyIndex = 0;
 
 const fetchVideosFromYouTube = async () => {
-    const searchQuery = 'News';
+    const searchQuery = 'Technology';
     const url = (apiKey) => `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&order=date&q=${searchQuery}&key=${apiKey}`;
 
     const currentTime = Date.now();
@@ -24,14 +24,19 @@ const fetchVideosFromYouTube = async () => {
             const response = await axios.get(url(apiKeyToUse.key));
             const videos = response.data.items;
 
+            console.log({ videos: JSON.stringify(videos) })
+
+
+
             const upsertPromises = videos.map(video => ({
+                id: video.id.videoId,
                 title: video.snippet.title,
                 description: video.snippet.description,
                 publishedAt: new Date(video.snippet.publishedAt),
                 thumbnailUrl: video.snippet.thumbnails.default.url,
             }));
 
-            console.log(JSON.stringify(upsertPromises))
+            // console.log(JSON.stringify(upsertPromises))
 
             await Video.bulkCreate(upsertPromises, { updateOnDuplicate: ['description', 'publishedAt', 'thumbnailUrl'] });
 
