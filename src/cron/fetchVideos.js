@@ -1,9 +1,5 @@
 const cron = require('node-cron');
-
-
-const fetchVideosFromYouTube = () => {
-    console.log("fetchVideosFromYouTube function")
-}
+const fetchVideosFromYouTube = require('../jobs/fetchVideosFromYouTube');
 
 let job;
 
