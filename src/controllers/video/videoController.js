@@ -49,6 +49,7 @@ const searchVideos = async (req, res) => {
                 [Op.or]: [
                     { title: { [Op.iLike]: `%${query}%` } },
                     { description: { [Op.iLike]: `%${query}%` } },
+                    { title: { [Op.iLike]: `%${query.split(' ').join('%')}%` } }
                 ],
             },
             order: [['publishedAt', 'DESC']],
