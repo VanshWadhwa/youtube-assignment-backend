@@ -10,6 +10,16 @@ const apiKeyUsage = process.env.YOUTUBE_API_KEYS.split(',').map(key => ({
 
 let currentKeyIndex = 0;
 
+/**
+ * Fetches videos from the YouTube API based on a predefined search query.
+ *
+ * This function uses a round-robin method to cycle through available API keys
+ * to avoid hitting the quota limits. If an API key is exhausted or encounters an error,
+ * it will increment the error count and move to the next key.
+ *
+ * @function fetchVideosFromYouTube
+ * @returns {Promise<void>}
+ */
 const fetchVideosFromYouTube = async () => {
     const searchQuery = 'Technology';
     const url = (apiKey) => `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&order=date&q=${searchQuery}&key=${apiKey}`;
@@ -24,9 +34,7 @@ const fetchVideosFromYouTube = async () => {
             const response = await axios.get(url(apiKeyToUse.key));
             const videos = response.data.items;
 
-            console.log({ videos: JSON.stringify(videos) })
-
-
+            console.log({ videos: JSON.stringify(videos) });
 
             const upsertPromises = videos.map(video => ({
                 id: video.id.videoId,
@@ -35,8 +43,6 @@ const fetchVideosFromYouTube = async () => {
                 publishedAt: new Date(video.snippet.publishedAt),
                 thumbnailUrl: video.snippet.thumbnails.default.url,
             }));
-
-            // console.log(JSON.stringify(upsertPromises))
 
             await Video.bulkCreate(upsertPromises, { updateOnDuplicate: ['description', 'publishedAt', 'thumbnailUrl'] });
 

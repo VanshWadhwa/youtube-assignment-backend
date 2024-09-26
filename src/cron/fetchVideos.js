@@ -3,6 +3,12 @@ const fetchVideosFromYouTube = require('../jobs/fetchVideosFromYouTube');
 
 let job;
 
+/**
+ * Starts a cron job that fetches videos from YouTube every 10 seconds.
+ *
+ * The job will not start if it is already running.
+ * @returns {void}
+ */
 const startJob = () => {
     if (!job) {
         job = cron.schedule('*/10 * * * * *', async () => {
@@ -14,6 +20,12 @@ const startJob = () => {
     }
 };
 
+/**
+ * Stops the currently running cron job.
+ *
+ * The job will only be stopped if it is currently running.
+ * @returns {void}
+ */
 const stopJob = () => {
     if (job) {
         job.stop();

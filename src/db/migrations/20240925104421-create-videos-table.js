@@ -1,5 +1,11 @@
-
 module.exports = {
+  /**
+   * Creates the 'videos' table in the database.
+   *
+   * @param {Object} queryInterface - The query interface used for database operations.
+   * @param {Object} Sequelize - The Sequelize library for defining data types.
+   * @returns {Promise<void>} A promise that resolves when the table is created.
+   */
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('videos', {
       id: {
@@ -36,6 +42,12 @@ module.exports = {
     });
   },
 
+  /**
+   * Drops the 'videos' table from the database.
+   *
+   * @param {Object} queryInterface - The query interface used for database operations.
+   * @returns {Promise<void>} A promise that resolves when the table is dropped.
+   */
   down: async (queryInterface) => {
     await queryInterface.dropTable('videos');
   },
