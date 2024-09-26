@@ -1,5 +1,5 @@
-const { Op } = require('sequelize');
 const Video = require('../../db/models/Video');
+const { sequelize } = require('../../db/config/database');
 
 /**
  * Retrieves a paginated list of videos, sorted by publication date.
@@ -43,20 +43,20 @@ const getVideos = async (req, res) => {
 const searchVideos = async (req, res) => {
     const { query } = req.query;
 
+    if (!query) {
+        return res.status(400).json({ message: 'Search query is required.' });
+    }
+
     try {
+        const searchQuery = query.split(' ').join(' & ');
+
         const videos = await Video.findAll({
-            where: {
-                [Op.or]: [
-                    { title: { [Op.iLike]: `%${query}%` } },
-                    { description: { [Op.iLike]: `%${query}%` } },
-                    { title: { [Op.iLike]: `%${query.split(' ').join('%')}%` } }
-                ],
-            },
-            order: [['publishedAt', 'DESC']],
+            where: sequelize.literal(`to_tsvector('english', title || ' ' || description) @@ to_tsquery('${searchQuery}')`),
         });
 
         res.json(videos);
     } catch (error) {
+        console.error(error);
         res.status(500).json({ message: error.message });
     }
 };
