@@ -1,20 +1,21 @@
 const cron = require('node-cron');
 const fetchVideosFromYouTube = require('../jobs/fetchVideosFromYouTube');
+const config = require('../../config/config'); // Import the config file
 
 let job;
 
 /**
- * Starts a cron job that fetches videos from YouTube every 10 seconds.
+ * Starts a cron job that fetches videos from YouTube based on the configured schedule.
  *
  * The job will not start if it is already running.
  * @returns {void}
  */
 const startJob = () => {
     if (!job) {
-        job = cron.schedule('*/10 * * * * *', async () => {
+        job = cron.schedule(config.CRON_SCHEDULE, async () => {
             await fetchVideosFromYouTube();
         });
-        console.log('Cron job started.');
+        console.log(`Cron job started with schedule: ${config.CRON_SCHEDULE}`);
     } else {
         console.log('Cron job is already running.');
     }
