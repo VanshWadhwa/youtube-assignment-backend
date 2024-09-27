@@ -51,6 +51,20 @@ const Video = sequelize.define('Video', {
 }, {
     timestamps: true,
     tableName: 'videos',
+    indexes: [
+        {
+            unique: false,
+            fields: ['title']
+        },
+        {
+            unique: false,
+            fields: ['description']
+        },
+        {
+            unique: false,
+            fields: ['publishedAt']
+        }
+    ],
 });
 
 module.exports = Video;

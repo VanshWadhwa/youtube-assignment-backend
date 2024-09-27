@@ -7,7 +7,13 @@
 
 I’m excited to share this API that retrieves the latest YouTube videos based on specific tags or search queries. The API is designed to deliver results in reverse chronological order, complete with pagination and robust search functionality for titles and descriptions. I look forward to the opportunity to discuss how my expertise can add value to your team!
 
+## Important Links
 
+For the frontend of this project, please visit the GitHub repository: [YouTube Assignment Frontend](https://github.com/VanshWadhwa/youtube-assignment-frontend).
+
+You can also check the API documentation here: [Postman Documentation](https://documenter.getpostman.com/view/38631609/2sAXqy3Kbj).
+
+For a visual overview, watch the video here: [Project Overview Video](https://youtu.be/xEcN8J2foOg).
 
 ## Tech Stack Used
 
@@ -23,11 +29,6 @@ I’m excited to share this API that retrieves the latest YouTube videos based o
 - **Husky**: Git hooks to enforce quality checks before commits.
 - **Commitlint**: Ensures that commit messages adhere to a specified convention.
 - **JSDoc**: Documentation generator for JavaScript, facilitating better code understanding and maintenance.
-
-## Frontend
-
-For the frontend of this project, please visit: [YouTube Assignment Frontend](https://github.com/VanshWadhwa/youtube-assignment-frontend)
-
 
 ## Features Implemented
 

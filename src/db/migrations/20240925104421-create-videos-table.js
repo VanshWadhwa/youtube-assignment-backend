@@ -40,6 +40,10 @@ module.exports = {
         defaultValue: Sequelize.fn('now'),
       },
     });
+
+    await queryInterface.addIndex('videos', ['title']);
+    await queryInterface.addIndex('videos', ['description']);
+    await queryInterface.addIndex('videos', ['publishedAt']);
   },
 
   /**

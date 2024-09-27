@@ -4,7 +4,7 @@ require('dotenv').config();
 const config = {
 
     API_KEYS: process.env.API_KEYS ? process.env.API_KEYS.split(',') : [],
-    DEFAULT_SEARCH_QUERY: process.env.DEFAULT_SEARCH_QUERY || 'Technology',
+    DEFAULT_SEARCH_QUERY: process.env.DEFAULT_SEARCH_QUERY || 'News',
     CRON_SCHEDULE: process.env.CRON_SCHEDULE || '*/10 * * * * *',
 };
 

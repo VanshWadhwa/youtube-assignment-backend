@@ -34,14 +34,19 @@ const getVideos = async (req, res) => {
 
 /**
  * Searches for videos by title or description using a query string.
+ * Retrieves a paginated list of videos based on the search criteria.
  *
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
  * @param {string} req.query.query - The search query to use for finding videos.
+ * @param {number} [req.query.page=1] - The page number to retrieve.
+ * @param {number} [req.query.limit=10] - The number of videos per page.
+ * @param {string} [req.query.sortOrder='desc'] - The order in which to sort the videos ('asc' or 'desc').
  * @returns {void}
  */
 const searchVideos = async (req, res) => {
-    const { query } = req.query;
+    const { query, page = 1, limit = 10, sortOrder = 'desc' } = req.query;
+    const offset = (page - 1) * limit;
 
     if (!query) {
         return res.status(400).json({ message: 'Search query is required.' });
@@ -50,11 +55,18 @@ const searchVideos = async (req, res) => {
     try {
         const searchQuery = query.split(' ').join(' & ');
 
-        const videos = await Video.findAll({
+        const { count, rows } = await Video.findAndCountAll({
             where: sequelize.literal(`to_tsvector('english', title || ' ' || description) @@ to_tsquery('${searchQuery}')`),
+            order: [['publishedAt', sortOrder]],
+            limit,
+            offset,
         });
 
-        res.json(videos);
+        res.json({
+            total: count,
+            pages: Math.ceil(count / limit),
+            videos: rows,
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: error.message });
